@@ -1,0 +1,1057 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shiva Prasad Kondabathini — Frontend / React Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #0f1218;
+        --ink-2: #151922;
+        --ink-3: #1c212d;
+        --line: #2a3040;
+        --paper: #f4efde;
+        --paper-2: #eae3cc;
+        --ink-on-paper: #1c1a12;
+        --gold: #e8a33d;
+        --gold-dim: #b9863a;
+        --vermillion: #d6553f;
+        --green: #5fae7e;
+        --text-hi: #f3efe4;
+        --text-lo: #8b92a3;
+        --text-faint: #5b6172;
+        --display: "Space Grotesk", sans-serif;
+        --body: "Inter", sans-serif;
+        --mono: "JetBrains Mono", monospace;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+      body {
+        background: var(--ink);
+        color: var(--text-hi);
+        font-family: var(--body);
+        line-height: 1.5;
+        overflow-x: hidden;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image:
+          radial-gradient(
+            circle at 20% 10%,
+            rgba(232, 163, 61, 0.06),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 85% 60%,
+            rgba(214, 85, 63, 0.05),
+            transparent 45%
+          );
+        pointer-events: none;
+        z-index: 0;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .wrap {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 0 28px;
+      }
+
+      /* ---------- NAV ---------- */
+      header.nav {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(15, 18, 24, 0.85);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav-inner {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 16px 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .brand {
+        font-family: var(--mono);
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 0.08em;
+        color: var(--gold);
+        border: 1px solid var(--gold-dim);
+        padding: 6px 10px;
+        border-radius: 3px;
+      }
+      .nav-links {
+        display: flex;
+        gap: 28px;
+        align-items: center;
+      }
+      .nav-links a {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        color: var(--text-lo);
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        transition: color 0.2s ease;
+      }
+      .nav-links a:hover,
+      .nav-links a:focus-visible {
+        color: var(--text-hi);
+      }
+      .nav-cta {
+        font-family: var(--mono);
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        background: var(--gold);
+        color: #191305;
+        padding: 9px 16px;
+        border-radius: 3px;
+        font-weight: 700;
+        text-transform: uppercase;
+        transition:
+          transform 0.15s ease,
+          background 0.2s ease;
+      }
+      .nav-cta:hover {
+        background: #f0b352;
+        transform: translateY(-1px);
+      }
+      :focus-visible {
+        outline: 2px solid var(--gold);
+        outline-offset: 2px;
+      }
+
+      /* ---------- HERO / BOARDING PASS ---------- */
+      main {
+        position: relative;
+        z-index: 1;
+      }
+      section {
+        padding: 88px 0;
+      }
+      .hero {
+        padding-top: 64px;
+        padding-bottom: 56px;
+      }
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--gold);
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .eyebrow .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 0 3px rgba(95, 174, 126, 0.2);
+      }
+
+      .ticket {
+        background: var(--paper);
+        color: var(--ink-on-paper);
+        border-radius: 10px;
+        position: relative;
+        box-shadow:
+          0 30px 60px -20px rgba(0, 0, 0, 0.6),
+          0 0 0 1px rgba(0, 0, 0, 0.04);
+        opacity: 0;
+        transform: translateY(18px) scale(0.99);
+        animation: punchIn 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+      }
+      @keyframes punchIn {
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .ticket-grid {
+        display: grid;
+        grid-template-columns: 1fr 220px;
+      }
+      .ticket-main {
+        padding: 38px 34px 30px;
+      }
+      .ticket-stub {
+        padding: 34px 26px;
+        border-left: 2px dashed rgba(28, 26, 18, 0.25);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: var(--paper-2);
+        border-radius: 0 10px 10px 0;
+      }
+      .ticket-stub::before,
+      .ticket-stub::after {
+        content: "";
+        position: absolute;
+        width: 22px;
+        height: 22px;
+        background: var(--ink);
+        border-radius: 50%;
+        left: -12px;
+      }
+      .ticket-stub::before {
+        top: -11px;
+      }
+      .ticket-stub::after {
+        bottom: -11px;
+      }
+
+      .tk-label {
+        font-family: var(--mono);
+        font-size: 10.5px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(28, 26, 18, 0.55);
+        margin-bottom: 4px;
+      }
+      .tk-value {
+        font-family: var(--display);
+        font-weight: 700;
+      }
+      .passenger-name {
+        font-size: clamp(28px, 4vw, 40px);
+        line-height: 1.08;
+        margin: 2px 0 6px;
+      }
+      .role-line {
+        font-family: var(--mono);
+        font-size: 14px;
+        color: var(--vermillion);
+        font-weight: 600;
+        margin-bottom: 22px;
+      }
+
+      .tk-meta-row {
+        display: flex;
+        gap: 36px;
+        flex-wrap: wrap;
+        margin-top: 22px;
+      }
+      .tk-meta-row .tk-value {
+        font-size: 15px;
+      }
+
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--mono);
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        background: rgba(95, 174, 126, 0.15);
+        color: #2e6b47;
+        border: 1px solid rgba(95, 174, 126, 0.4);
+        padding: 7px 12px;
+        border-radius: 20px;
+        margin-top: 20px;
+      }
+      .status-badge .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--green);
+      }
+
+      .barcode {
+        height: 34px;
+        margin-top: auto;
+        background: repeating-linear-gradient(
+          90deg,
+          var(--ink-on-paper) 0 2px,
+          transparent 2px 5px,
+          var(--ink-on-paper) 5px 6px,
+          transparent 6px 10px
+        );
+        opacity: 0.85;
+      }
+      .stub-token {
+        font-family: var(--mono);
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+      }
+      .stub-foot {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: rgba(28, 26, 18, 0.5);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .hero-sub {
+        max-width: 640px;
+        margin-top: 26px;
+        color: var(--text-lo);
+        font-size: 16px;
+        line-height: 1.7;
+      }
+      .hero-sub strong {
+        color: var(--text-hi);
+        font-weight: 600;
+      }
+
+      /* ---------- STATS ---------- */
+      .stats-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-top: 44px;
+      }
+      .stat-cell {
+        background: var(--ink-2);
+        padding: 26px 20px;
+      }
+      .stat-num {
+        font-family: var(--mono);
+        font-size: 30px;
+        font-weight: 700;
+        color: var(--gold);
+      }
+      .stat-label {
+        font-size: 12.5px;
+        color: var(--text-lo);
+        margin-top: 6px;
+        letter-spacing: 0.02em;
+      }
+
+      /* ---------- SECTION HEADERS ---------- */
+      .sec-head {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        margin-bottom: 34px;
+      }
+      .sec-tag {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--gold-dim);
+        letter-spacing: 0.1em;
+      }
+      .sec-title {
+        font-family: var(--display);
+        font-size: 28px;
+        font-weight: 700;
+      }
+      .sec-rule {
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+
+      /* ---------- EXPERIENCE ---------- */
+      .exp-card {
+        background: var(--ink-2);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 32px 30px;
+        position: relative;
+        overflow: hidden;
+      }
+      .exp-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 6px;
+      }
+      .exp-role {
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: 20px;
+      }
+      .exp-org {
+        color: var(--text-lo);
+        font-size: 14px;
+        margin-top: 2px;
+      }
+      .exp-date {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--gold);
+        border: 1px solid var(--gold-dim);
+        padding: 5px 10px;
+        border-radius: 3px;
+        white-space: nowrap;
+      }
+      .exp-project {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--vermillion);
+        margin: 14px 0 20px;
+        letter-spacing: 0.02em;
+      }
+      .stub-list {
+        list-style: none;
+        display: grid;
+        gap: 0;
+      }
+      .stub-list li {
+        display: grid;
+        grid-template-columns: 64px 1fr;
+        gap: 16px;
+        padding: 16px 0;
+        border-top: 1px dashed var(--line);
+      }
+      .stub-list li:first-child {
+        border-top: none;
+      }
+      .stub-idx {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text-faint);
+        padding-top: 2px;
+      }
+      .stub-text {
+        font-size: 14.5px;
+        color: #d8d4c8;
+        line-height: 1.65;
+      }
+      .stub-text b {
+        color: var(--text-hi);
+        font-weight: 600;
+      }
+
+      /* ---------- SKILLS ---------- */
+      .skill-groups {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+      }
+      .skill-card {
+        background: var(--ink-2);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 24px;
+      }
+      .skill-cat {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--gold);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+      }
+      .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .chip {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        color: #d8d4c8;
+        background: var(--ink-3);
+        border: 1px solid var(--line);
+        padding: 6px 11px;
+        border-radius: 5px;
+      }
+
+      /* ---------- AWARDS ---------- */
+      .award-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .award-ticket {
+        background: var(--paper);
+        color: var(--ink-on-paper);
+        border-radius: 8px;
+        padding: 22px 22px 20px;
+        position: relative;
+        box-shadow: 0 16px 30px -14px rgba(0, 0, 0, 0.5);
+      }
+      .award-ticket::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 26px;
+        width: 14px;
+        height: 14px;
+        background: var(--ink);
+        border-radius: 50%;
+        transform: translateY(-50%);
+      }
+      .award-name {
+        font-family: var(--display);
+        font-weight: 700;
+        font-size: 16.5px;
+        margin-bottom: 6px;
+      }
+      .award-org {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--vermillion);
+        margin-bottom: 10px;
+        letter-spacing: 0.04em;
+      }
+      .award-desc {
+        font-size: 13.5px;
+        color: rgba(28, 26, 18, 0.75);
+        line-height: 1.55;
+      }
+
+      /* ---------- EDU / CERT ---------- */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+      }
+      .info-card {
+        background: var(--ink-2);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 26px;
+      }
+      .info-card h3 {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--gold);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+      .row-item {
+        padding: 12px 0;
+        border-top: 1px dashed var(--line);
+      }
+      .row-item:first-child {
+        border-top: none;
+        padding-top: 0;
+      }
+      .row-title {
+        font-weight: 600;
+        font-size: 14.5px;
+        color: var(--text-hi);
+      }
+      .row-sub {
+        font-size: 13px;
+        color: var(--text-lo);
+        margin-top: 3px;
+      }
+      .row-date {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text-faint);
+        margin-top: 4px;
+      }
+
+      /* ---------- CONTACT / GATE ---------- */
+      .gate {
+        background: var(--ink-2);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 44px 38px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .gate::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          90deg,
+          transparent 0 18px,
+          rgba(232, 163, 61, 0.05) 18px 19px
+        );
+        pointer-events: none;
+      }
+      .gate-title {
+        font-family: var(--display);
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+      .gate-sub {
+        color: var(--text-lo);
+        font-size: 15px;
+        max-width: 480px;
+        margin: 0 auto 28px;
+      }
+      .gate-links {
+        display: flex;
+        gap: 14px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .gate-link {
+        font-family: var(--mono);
+        font-size: 13px;
+        letter-spacing: 0.03em;
+        border: 1px solid var(--line);
+        padding: 11px 18px;
+        border-radius: 6px;
+        color: var(--text-hi);
+        transition: all 0.2s ease;
+        background: var(--ink-3);
+      }
+      .gate-link:hover,
+      .gate-link:focus-visible {
+        border-color: var(--gold);
+        color: var(--gold);
+        transform: translateY(-1px);
+      }
+      .gate-link.primary {
+        background: var(--gold);
+        color: #191305;
+        border-color: var(--gold);
+        font-weight: 700;
+      }
+      .gate-link.primary:hover {
+        background: #f0b352;
+        color: #191305;
+      }
+
+      footer {
+        text-align: center;
+        padding: 32px 0 50px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text-faint);
+        letter-spacing: 0.05em;
+      }
+
+      /* ---------- responsive ---------- */
+      @media (max-width: 760px) {
+        .ticket-grid {
+          grid-template-columns: 1fr;
+        }
+        .ticket-stub {
+          border-left: none;
+          border-top: 2px dashed rgba(28, 26, 18, 0.25);
+          border-radius: 0 0 10px 10px;
+        }
+        .ticket-stub::before,
+        .ticket-stub::after {
+          left: auto;
+          top: -11px;
+        }
+        .ticket-stub::before {
+          left: -11px;
+        }
+        .ticket-stub::after {
+          left: auto;
+          right: -11px;
+          bottom: auto;
+          top: -11px;
+        }
+        .stats-strip {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .skill-groups,
+        .award-row,
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+        .nav-links {
+          display: none;
+        }
+        section {
+          padding: 56px 0;
+        }
+      }
+
+      .fade-up {
+        opacity: 0;
+        transform: translateY(16px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .fade-up.in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body>
+    <header class="nav">
+      <div class="nav-inner">
+        <span class="brand">SHIVA PRASAD KONDABATHINI</span>
+        <nav class="nav-links">
+          <a href="#experience">Work</a>
+          <a href="#skills">Skills</a>
+          <a href="#awards">Awards</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <!-- HERO: BOARDING PASS -->
+      <section class="hero">
+        <div class="eyebrow">
+          <span class="dot"></span> Open to new opportunities
+        </div>
+
+        <div class="ticket">
+          <div class="ticket-grid">
+            <div class="ticket-main">
+              <div class="tk-label">Frontend Engineer — Boarding Pass</div>
+              <h1 class="passenger-name">Shiva Prasad Kondabathini</h1>
+              <div class="role-line">
+                React.js Developer · 4+ Years Experience
+              </div>
+
+              <div class="tk-meta-row">
+                <div>
+                  <div class="tk-label">Currently at</div>
+                  <div class="tk-value">Tata Consultancy Services</div>
+                </div>
+                <div>
+                  <div class="tk-label">Based in</div>
+                  <div class="tk-value">Hyderabad, India</div>
+                </div>
+                <div>
+                  <div class="tk-label">Last working day</div>
+                  <div class="tk-value">24 Aug 2026</div>
+                </div>
+              </div>
+
+              <div class="status-badge">
+                <span class="dot"></span> Confirmed — available for new roles
+              </div>
+            </div>
+
+            <!-- <div class="ticket-stub">
+              <div>
+                <div class="stub-token">4+</div>
+                <div class="stub-foot" style="margin-top: 14px">
+                  Years of experience
+                </div>
+              </div>
+              <div class="barcode" aria-hidden="true"></div>
+              <div class="stub-foot">shiva · react · frontend</div>
+            </div> -->
+          </div>
+        </div>
+
+        <p class="hero-sub">
+          I build the screens millions of people rely on without thinking about
+          it. At TCS I've spent four years on the frontend of
+          <strong>TTD Online Services</strong> — one of India's highest-traffic
+          government platforms — shipping booking flows, payment integrations,
+          and performance work at a scale most portfolios only talk about. Now
+          expanding into full-stack with Node.js and MongoDB, and looking for
+          the next place to build.
+        </p>
+
+        <div class="stats-strip">
+          <div class="stat-cell">
+            <div class="stat-num">25+</div>
+            <div class="stat-label">Reusable React components shipped</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">50+</div>
+            <div class="stat-label">REST APIs integrated in production</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">35%</div>
+            <div class="stat-label">Faster load times after optimization</div>
+          </div>
+          <div class="stat-cell">
+            <div class="stat-num">60%</div>
+            <div class="stat-label">Fewer unnecessary re-renders</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPERIENCE -->
+      <section id="experience">
+        <div class="sec-head">
+          <span class="sec-tag">01</span>
+          <h2 class="sec-title">Work</h2>
+          <div class="sec-rule"></div>
+        </div>
+
+        <div class="exp-card fade-up">
+          <div class="exp-top">
+            <div>
+              <div class="exp-role">System Engineer — Frontend</div>
+              <div class="exp-org">Tata Consultancy Services (TCS)</div>
+            </div>
+            <div class="exp-date">Mar 2022 — Present</div>
+          </div>
+          <div class="exp-project">
+            Project: TTD Online Services — Tirumala Tirupati Devasthanams
+          </div>
+
+          <ul class="stub-list">
+            <li>
+              <div class="stub-idx">01</div>
+              <div class="stub-text">
+                <b>Component architecture.</b> Designed 25+ reusable React
+                components for one of India's highest-traffic government
+                portals, cutting duplicate code across 5+ booking modules and
+                speeding up feature rollout.
+              </div>
+            </li>
+            <li>
+              <div class="stub-idx">02</div>
+              <div class="stub-text">
+                <b>Quota Management System.</b> Built the booking system for
+                Darshan, Accommodation, and Kalyana Mandapam slots, handling
+                thousands of concurrent users with optimized state management
+                and async API handling.
+              </div>
+            </li>
+            <li>
+              <div class="stub-idx">03</div>
+              <div class="stub-text">
+                <b>E-Commerce flow.</b> Built the end-to-end cart and checkout
+                for Panchagavya products with Razorpay integration, processing
+                thousands of daily transactions.
+              </div>
+            </li>
+            <li>
+              <div class="stub-idx">04</div>
+              <div class="stub-text">
+                <b>Performance.</b> Delivered 35% faster load times and 60%
+                fewer unnecessary re-renders through lazy loading and React
+                performance work in a high-concurrency production app.
+              </div>
+            </li>
+            <li>
+              <div class="stub-idx">05</div>
+              <div class="stub-text">
+                <b>Integrations & security.</b> Wired up 50+ REST APIs across
+                booking, auth, and payment with Axios (debouncing, centralized
+                error handling), plus JWT-based auth flows and sensitive-data
+                masking for compliance.
+              </div>
+            </li>
+            <li>
+              <div class="stub-idx">GATE&nbsp;06</div>
+              <div class="stub-text">
+                <b>Leadership.</b> Led frontend for the Accommodation Booking
+                module, working with designers, BAs, and QA to lock acceptance
+                criteria upfront — smoother sprints, fewer surprises.
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section id="skills">
+        <div class="sec-head">
+          <span class="sec-tag">02</span>
+          <h2 class="sec-title">Skills manifest</h2>
+          <div class="sec-rule"></div>
+        </div>
+
+        <div class="skill-groups">
+          <div class="skill-card">
+            <div class="skill-cat">Frontend</div>
+            <div class="chip-row">
+              <span class="chip">React.js</span
+              ><span class="chip">JavaScript (ES6+)</span
+              ><span class="chip">TypeScript</span>
+              <span class="chip">Redux Toolkit</span
+              ><span class="chip">Context API</span
+              ><span class="chip">React Router</span>
+              <span class="chip">React Hooks</span
+              ><span class="chip">HTML5</span><span class="chip">CSS3</span>
+              <span class="chip">Tailwind CSS</span
+              ><span class="chip">Bootstrap</span
+              ><span class="chip">Flexbox / Grid</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-cat">API &amp; Auth</div>
+            <div class="chip-row">
+              <span class="chip">REST APIs</span><span class="chip">Axios</span
+              ><span class="chip">JSON</span><span class="chip">JWT Auth</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-cat">Tools</div>
+            <div class="chip-row">
+              <span class="chip">VS Code</span
+              ><span class="chip">Git / GitHub</span
+              ><span class="chip">NPM</span> <span class="chip">Vite</span
+              ><span class="chip">Tortoise SVN</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-cat">AI Tools &amp; Practices</div>
+            <div class="chip-row">
+              <span class="chip">GitHub Copilot</span
+              ><span class="chip">OpenAI Codex</span
+              ><span class="chip">Agile</span>
+              <span class="chip">Code Reviews</span
+              ><span class="chip">Performance Optimization</span
+              ><span class="chip">Component Architecture</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AWARDS -->
+      <section id="awards">
+        <div class="sec-head">
+          <span class="sec-tag">03</span>
+          <h2 class="sec-title">Awards</h2>
+          <div class="sec-rule"></div>
+        </div>
+        <div class="award-row">
+          <div class="award-ticket">
+            <div class="award-name">On The Spot Award</div>
+            <div class="award-org">TCS</div>
+            <div class="award-desc">
+              Recognized for outstanding contribution, dedication, and being an
+              inspiring role model to colleagues.
+            </div>
+          </div>
+          <div class="award-ticket">
+            <div class="award-name">Service &amp; Commitment Award</div>
+            <div class="award-org">TCS</div>
+            <div class="award-desc">
+              Honored for three years of dedicated service and consistent
+              contribution to organizational goals.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- EDUCATION & CERTS -->
+      <section id="education">
+        <div class="sec-head">
+          <span class="sec-tag">04</span>
+          <h2 class="sec-title">Education &amp; certifications</h2>
+          <div class="sec-rule"></div>
+        </div>
+        <div class="two-col">
+          <div class="info-card">
+            <h3>Education</h3>
+            <div class="row-item">
+              <div class="row-title">B.Tech — Civil Engineering</div>
+              <div class="row-sub">
+                Kakatiya Institute of Technology &amp; Science, Warangal
+              </div>
+              <div class="row-date">June 2021</div>
+            </div>
+            <div class="row-item">
+              <div class="row-title">Intermediate (M.P.C)</div>
+              <div class="row-sub">Sri Chaitanya Junior College, Hyderabad</div>
+              <div class="row-date">May 2017</div>
+            </div>
+          </div>
+          <div class="info-card">
+            <h3>Certifications</h3>
+            <div class="row-item">
+              <div class="row-title">
+                The Complete JavaScript Course 2025: From Zero to Expert
+              </div>
+              <div class="row-sub">Udemy</div>
+            </div>
+            <div class="row-item">
+              <div class="row-title">
+                React &amp; TypeScript — The Practical Guide
+              </div>
+              <div class="row-sub">Udemy</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact">
+        <div class="gate">
+          <div class="gate-title">Boarding closes 24 August 2026</div>
+          <p class="gate-sub">
+            That's my last day at TCS — and the start of my search for the next
+            team to build with. Reach out, I reply fast.
+          </p>
+          <div class="gate-links">
+            <a
+              class="gate-link primary"
+              href="mailto:shivakondabathini2017@gmail.com"
+              >Email me</a
+            >
+            <a class="gate-link" href="tel:+919121456726">+91 91214 56726</a>
+            <a
+              class="gate-link"
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener"
+              >LinkedIn</a
+            >
+            <a
+              class="gate-link"
+              href="https://github.com"
+              target="_blank"
+              rel="noopener"
+              >GitHub</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      SHIVA PRASAD KONDABATHINI · HYDERABAD, INDIA · BUILT FOR THE NEXT BOARDING
+      GATE
+    </footer>
+
+    <script>
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("in");
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.15 },
+      );
+      document.querySelectorAll(".fade-up").forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>
